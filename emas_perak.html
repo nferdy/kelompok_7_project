@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar layout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1 class="logo"><a href="/index.html">Kalkulator Zakat</a></h1>
+        <ul class="option">
+            <li class="home"><a href="/index.html">Home</a></li>
+            <li class="about-project"><a href="/about.html">About Project</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="sidebar">
+            <div class="title">
+                <h1><a href="/index.html">Zakat Maal</a></h1>
+            </div>
+            <div class="zakatnya">
+                <ul class="list_zakat">
+                    <li class="zakat1"><a href="/emasperak.html">Emas dan Perak</a></li>
+                    <li class="zakat2"><a href="#pendapatan">Pendapatan</a></li>
+                    <li class="zakat3"><a href="#perniagaan">Perniagaan</a></li>
+                    <li class="zakat4"><a href="#pertanian">Pertanian</a></li>
+                    <li class="zakat5"><a href="#peternakan">Peternakan</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content_title">
+                <h1>Zakat Emas dan Perak</h1>
+            </div>
+            <div class="input_emasperak">
+                <form>
+                    <div class="kolom_emas">
+                        <label for="emas">Nilai Emas:</label><br>
+                        <input type="number" id="emas" name="nilai_emas" placeholder="Input Nilai Emas"><br>
+                    </div>
+                    <label for="perak">Nilai Perak:</label><br>
+                    <input type="text" id="perak" name="nilai_perak" placeholder="Input Nilai Perak">
+                    <br>
+                    <input type="submit" value="Hitung" class="tombol_hitung">
+                  </form>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <h1>footer</h1>
+    </div>
+</body>
+</html>
