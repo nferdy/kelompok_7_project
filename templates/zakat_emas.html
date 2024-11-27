@@ -5,9 +5,9 @@
 <div class="form_input">
     <form method="post" action="/zakat-emas">
         <label for="quantity">Nilai Emas</label>
-        <span>Rp</span>
-        <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai emas anda...">
-        <input type="submit">
+        <input type="number" id="quantity" name="quantity_emas" min="0" placeholder="Input nilai emas anda...">
+        <button type="submit">Hitung zakat Anda</button>
       </form>
 </div>
+<p>nilai zakat mu adalah Rp{{ nilai_zakat }}</p>
 {% endblock %}

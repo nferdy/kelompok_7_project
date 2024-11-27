@@ -12,21 +12,12 @@ def about():
 @app.route('/zakat-emas', methods=['GET', 'POST'])
 def zakat_emas():
     if request.method == 'POST':
-        try:
-            total_nilai_emas = float(request.form['total_nilai_emas'])
-            harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
-
-            nisab = 85 * 1439700
-            zakat = 0.025 * total_nilai_emas if total_nilai_emas >= nisab else 0
-
-            return render_template('zakat_emas.html', 
-                                   total_nilai_emas=total_nilai_emas,
-                                   harga_emas_per_gram=harga_emas_per_gram,
-                                   nisab=nisab, zakat=zakat,
-                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
-        except ValueError:
-            return render_template('zakat_emas.html', error="Input tidak valid.")
-    return render_template('emas-perak.html')
+        quantity_emas = float(request.form['quantity_emas'])
+        nilai_zakat = 0.025 * quantity_emas
+        nilai_zakat = int(nilai_zakat)
+        nilai_zakat = f"{nilai_zakat:,}".replace(",", ".")
+        return render_template('zakat_emas.html', nilai_zakat=nilai_zakat)
+    return render_template('zakat_emas.html')
 
 @app.route('/zakat-perdagangan', methods=['GET', 'POST'])
 def zakat_perdagangan():
