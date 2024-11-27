@@ -1,0 +1,29 @@
+
+.title_zakat {
+    margin: 40px 0 0 50px;
+}
+
+.form_input form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 0 50px;
+}
+
+input[type=number] {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 10%;
+    font-size: 15px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }

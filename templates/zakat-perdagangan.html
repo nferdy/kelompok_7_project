@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/zakat-perdagangan.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<h1 class="title_zakat">Zakat Perdagangan</h1>
+<div class="form_input">
+    <form method="post" action="/zakat-emas">
+        <label for="quantity">Nilai Piutang</label>
+        <span>Rp</span>
+        <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai piutang anda...">
+        <input type="submit">
+      </form>
+</div>
+
+{% endblock %}

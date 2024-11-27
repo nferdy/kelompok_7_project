@@ -9,16 +9,44 @@ def home():
 def about():
     return render_template('about-project.html')
 
+# zakat emas
 @app.route('/zakat-emas', methods=['GET', 'POST'])
 def zakat_emas():
-    if request.method == 'POST':
-        quantity_emas = float(request.form['quantity_emas'])
-        nilai_zakat = 0.025 * quantity_emas
-        nilai_zakat = int(nilai_zakat)
-        nilai_zakat = f"{nilai_zakat:,}".replace(",", ".")
-        return render_template('zakat_emas.html', nilai_zakat=nilai_zakat)
-    return render_template('zakat_emas.html')
+    harga_emas_per_gram = 1439700
 
+    if request.method == 'POST':
+
+        # Menangkap nilai nilai dari user yang diperlukan untuk perhitungan
+        jumlah_emas = float(request.form['jumlah_emas'])
+        
+        # inisialisasi nisab dan total nilai emas dari si user
+        nisab = 85 * harga_emas_per_gram
+        total_nilai_emas = jumlah_emas
+        total_nilai_zakat = 0
+
+        # kalo nilai >= nisab, lakukan perhitungan, dan user jadi wajib zakat sebesar jumlah total_nilai_zakat
+        if total_nilai_emas >= nisab:
+            total_nilai_zakat = 0.025 * jumlah_emas
+            wajib_zakat = True
+
+        # kalo nilai emas < nisab, user gausah zakat
+        else:
+            wajib_zakat = False
+
+        # ngeformat angka angka biar kalo udah 3 angka otomatis ada titik kayak nulis uang
+        total_nilai_zakat_formatted = f"{int(total_nilai_zakat):,}".replace(",", ".")
+        nisab_formatted = f"{int(nisab):,}".replace(",", ".")
+
+        return render_template('zakat_emas.html', 
+                               wajib_zakat=wajib_zakat, 
+                               nilai_zakat=total_nilai_zakat_formatted,
+                               nisab=nisab_formatted,
+                               harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+    
+    return render_template('zakat_emas.html', nilai_zakat=None, harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+
+
+# zakat perdagangan
 @app.route('/zakat-perdagangan', methods=['GET', 'POST'])
 def zakat_perdagangan():
     if request.method == 'POST':

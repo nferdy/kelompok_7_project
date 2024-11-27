@@ -1,13 +1,45 @@
 {% extends "base.html" %}
 
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/zakat-emas.css') }}">
+{% endblock %}
+
 {% block content %}
 <h1 class="title_zakat">Zakat Emas dan Perak</h1>
 <div class="form_input">
     <form method="post" action="/zakat-emas">
-        <label for="quantity">Nilai Emas</label>
-        <input type="number" id="quantity" name="quantity_emas" min="0" placeholder="Input nilai emas anda...">
+        <label for="harga_emas_per_gram">Harga Emas per Gram Saat Ini</label>
+        <p>Rp {{ harga_emas_per_gram }}</p>
+        <br>
+        <label for="jumlah_emas">Nilai Emas</label>
+        <input type="number" id="jumlah_emas" name="jumlah_emas" min="0" required placeholder="Input nilai emas anda dalam rupiah...">
         <button type="submit">Hitung zakat Anda</button>
-      </form>
+    </form>
 </div>
-<p>nilai zakat mu adalah Rp{{ nilai_zakat }}</p>
+
+{% if nilai_zakat is not none %}
+<div class="hasil_zakat">
+    <h2>Hasil Perhitungan</h2>
+    <p>Nisab (85 gram): Rp {{ nisab }}</p>
+    {% if wajib_zakat %}
+        <p class="zakat_yes"><strong>Anda wajib membayar zakat!</strong></p>
+        <p>Nilai Zakat yang harus dibayar: <strong>Rp {{ nilai_zakat }}</strong></p>
+    {% else %}
+        <p class="zakat_no"><strong>Anda tidak wajib membayar zakat.</strong></p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Deskripsi zakat tetap ditampilkan di bawah hasil perhitungan -->
+<div class="desc_zakat">
+    <p name="desc_zakat">
+        <b>Nisab dan Cara Menghitung Zakat Emas</b> <br>
+        Zakat emas wajib dikenakan zakat jika emas yang tersimpan telah mencapai atau melebihi nisabnya yakni 85 gram (mengikuti harga Buy Back emas pada hari dimana zakat akan ditunaikan), 
+        kadar zakat emas adalah 2,5%.<br><br>
+        Berikut cara menghitung zakat emas/perak:<br>
+        2,5% x Jumlah emas yang tersimpan selama 1 tahun <br><br>
+
+        Sumber: basnas.go.id
+    </p>
+</div>
 {% endblock %}
