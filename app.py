@@ -1,7 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.route('/')
+def home_page():
+    return render_template('home.html')
+
 @app.route('/zakat-emas', methods=['POST'])
 def zakat_emas():
     try:
@@ -116,4 +121,4 @@ def zakat_penghasilan():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(debug=True)
