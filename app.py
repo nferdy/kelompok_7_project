@@ -1,5 +1,4 @@
 from flask import Flask, request,  render_template
-
 app = Flask(__name__)
 
 @app.route('/')
@@ -17,7 +16,7 @@ def zakat_emas():
             total_nilai_emas = float(request.form['total_nilai_emas'])
             harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
 
-            nisab = 85 * harga_emas_per_gram
+            nisab = 85 * 1439700
             zakat = 0.025 * total_nilai_emas if total_nilai_emas >= nisab else 0
 
             return render_template('zakat_emas.html', 
@@ -98,4 +97,4 @@ def zakat_penghasilan():
     return render_template('zakat_penghasilan.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
