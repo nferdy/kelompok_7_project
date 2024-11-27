@@ -43,7 +43,7 @@ def zakat_perdagangan():
             nilai = (modal + keuntungan + piutang) - (kerugian + hutang)
             zakat = 0.025 * nilai if nilai >= nisab else 0
 
-            return render_template('zakat_perdagangan.html', 
+            return render_template('perdagangan.html', 
                                    modal=modal, keuntungan=keuntungan, 
                                    piutang=piutang, hutang=hutang, 
                                    kerugian=kerugian, nilai=nilai,
@@ -51,8 +51,8 @@ def zakat_perdagangan():
                                    nisab=nisab, zakat=zakat,
                                    keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
         except ValueError:
-            return render_template('zakat_perdagangan.html', error="Input tidak valid.")
-    return render_template('zakat_perdagangan.html')
+            return render_template('perdagangan.html', error="Input tidak valid.")
+    return render_template('perdagangan.html')
 
 @app.route('/zakat-pertanian', methods=['GET', 'POST'])
 def zakat_pertanian():

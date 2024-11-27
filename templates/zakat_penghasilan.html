@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="title_zakat">Zakat Penghasilan</h1>
+<div class="form_input">
+    <form method="post" action="/zakat-emas">
+        <label for="quantity">Nilai Modal</label>
+        <div class="form-modal">
+            <span>Rp</span>
+            <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai modal anda...">
+        </div>
+        <input type="submit">
+      </form>
+</div>
+
+
+{% endblock %}

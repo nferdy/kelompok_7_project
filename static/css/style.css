@@ -107,3 +107,8 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
   }
+
+.form-modal {
+    display: flex;
+    align-items: center;
+}
