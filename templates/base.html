@@ -13,19 +13,28 @@
         </div>
         <div class="option">
             <ul class="nav_option">
-                <li class="home"><a href="{{url_for ('home_page')}}">Home</a></li>
-                <li class="about"><a href="/about">About Project</a></li>
+                <li class="home"><a href="{{url_for ('home')}}">Home</a></li>
+                <li class="about"><a href="{{url_for ('about')}}">About Project</a></li>
             </ul>
         </div>
     </nav>
 
     <div class="content">
         <div class="sidebar">
-            <p></p>
+            <p class="sidebar_title">Pilih Jenis Zakat</p>
+            <ul class="list_zakat">
+                <li><a href="{{url_for ('zakat_emas')}}">Emas dan Perak</a></li>
+                <li><a href="">Perdagangan</a></li>
+                <li><a href="">Pertanian</a></li>
+                <li><a href="">Penghasilan</a></li>
+            </ul>
         </div>
-        {% block content %}
 
-        {% endblock %}
+        <div class="menu_kal">
+            {% block content %}
+    
+            {% endblock %}
+        </div>
     </div>
 
 </body>
