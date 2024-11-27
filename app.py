@@ -1,119 +1,101 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request,  render_template
+
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-@app.route('/zakat-emas', methods=['POST'])
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/about')
+def about():
+    return render_template('about-project.html')
+
+@app.route('/zakat-emas', methods=['GET', 'POST'])
 def zakat_emas():
-    try:
-        data = request.get_json()
-        total_nilai_emas = float(data['total_nilai_emas'])  
-        harga_emas_per_gram = float(data['harga_emas_per_gram'])  
+    if request.method == 'POST':
+        try:
+            total_nilai_emas = float(request.form['total_nilai_emas'])
+            harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
 
-        nisab = 85 * harga_emas_per_gram
+            nisab = 85 * harga_emas_per_gram
+            zakat = 0.025 * total_nilai_emas if total_nilai_emas >= nisab else 0
 
-        if total_nilai_emas >= nisab:
-            zakat = 0.025 * total_nilai_emas  
-        else:
-            zakat = 0  
+            return render_template('zakat_emas.html', 
+                                   total_nilai_emas=total_nilai_emas,
+                                   harga_emas_per_gram=harga_emas_per_gram,
+                                   nisab=nisab, zakat=zakat,
+                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
+        except ValueError:
+            return render_template('zakat_emas.html', error="Input tidak valid.")
+    return render_template('emas-perak.html')
 
-       
-        return jsonify({
-            "total_nilai_emas": total_nilai_emas,
-            "harga_emas_per_gram": harga_emas_per_gram,
-            "nisab": nisab,
-            "zakat": zakat,
-            "keterangan": "Wajib zakat" if zakat > 0 else "Tidak wajib zakat"
-        })
-
-    except (ValueError, KeyError):
-        return jsonify({"error": "Input tidak valid. Pastikan mengirim 'total_nilai_emas' dan 'harga_emas_per_gram'."}), 400
-
-@app.route('/zakat-perdagangan', methods=['POST'])
+@app.route('/zakat-perdagangan', methods=['GET', 'POST'])
 def zakat_perdagangan():
-    try:
-        # comment: 
-        data = request.get_json()
-        modal = float(data['modal'])  
-        keuntungan = float(data['keuntungan']) 
-        piutang = float(data['piutang'])
-        hutang= float(data['hutang'])
-        kerugian = float(data['kerugian'])
-        harga_emas_per_gram = float(data['harga_emas_per_gram'])  
+    if request.method == 'POST':
+        try:
+            modal = float(request.form['modal'])
+            keuntungan = float(request.form['keuntungan'])
+            piutang = float(request.form['piutang'])
+            hutang = float(request.form['hutang'])
+            kerugian = float(request.form['kerugian'])
+            harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
 
-        nisab = 85 * harga_emas_per_gram
-        nilai = (modal + keuntungan + piutang) - (kerugian + hutang)
+            nisab = 85 * harga_emas_per_gram
+            nilai = (modal + keuntungan + piutang) - (kerugian + hutang)
+            zakat = 0.025 * nilai if nilai >= nisab else 0
 
-        if nilai >= nisab:
-            zakat = 0.025 * nilai  
-        else:
-            zakat = 0 
+            return render_template('zakat_perdagangan.html', 
+                                   modal=modal, keuntungan=keuntungan, 
+                                   piutang=piutang, hutang=hutang, 
+                                   kerugian=kerugian, nilai=nilai,
+                                   harga_emas_per_gram=harga_emas_per_gram,
+                                   nisab=nisab, zakat=zakat,
+                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
+        except ValueError:
+            return render_template('zakat_perdagangan.html', error="Input tidak valid.")
+    return render_template('zakat_perdagangan.html')
 
-        return jsonify({
-            "total harta": nilai,
-            "harga_emas_per_gram": harga_emas_per_gram,
-            "nisab": nisab,
-            "zakat": zakat,
-            "keterangan": "Wajib zakat" if zakat > 0 else "Tidak wajib zakat"
-        })
-    except (ValueError, KeyError):
-        return jsonify({"error": "Input tidak valid. Pastikan mengirim 'total_nilai_emas' dan 'harga_emas_per_gram'."}), 400
-    # end try
-
-@app.route('/zakat-pertanian', methods=['POST'])
+@app.route('/zakat-pertanian', methods=['GET', 'POST'])
 def zakat_pertanian():
-    try:
-        data = request.get_json()
-        hasil_panen = float(data['hasil_panen'])  
-        sistem_pengairan = data['sistem_pengairan']
+    if request.method == 'POST':
+        try:
+            hasil_panen = float(request.form['hasil_panen'])
+            sistem_pengairan = request.form['sistem_pengairan']
 
-        if sistem_pengairan not in ['irigasi', 'alami']:
-            return jsonify({"error": "Sistem_pengairan harus 'irigasi' atau 'alami'"}), 400
-        
-        nisab = 653 #dalam kg padi
-        zakat_percentage = 0.05 if sistem_pengairan == 'irigasi' else 0.10
+            if sistem_pengairan not in ['irigasi', 'alami']:
+                return render_template('zakat_pertanian.html', error="Sistem pengairan harus 'irigasi' atau 'alami'.")
 
-        if hasil_panen >= nisab:
-            zakat = hasil_panen * zakat_percentage  
-        else:
-            zakat = 0  
+            nisab = 653  # dalam kg padi
+            zakat_percentage = 0.05 if sistem_pengairan == 'irigasi' else 0.10
+            zakat = hasil_panen * zakat_percentage if hasil_panen >= nisab else 0
 
-       
-        return jsonify({
-            "hasil_panen": hasil_panen,
-            "sistem_pengairan": sistem_pengairan,
-            "nisab": nisab,
-            "zakat": zakat,
-            "keterangan": "Wajib zakat" if zakat > 0 else "Tidak wajib zakat"
-        })
+            return render_template('zakat_pertanian.html',
+                                   hasil_panen=hasil_panen,
+                                   sistem_pengairan=sistem_pengairan,
+                                   nisab=nisab, zakat=zakat,
+                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
+        except ValueError:
+            return render_template('zakat_pertanian.html', error="Input tidak valid.")
+    return render_template('zakat_pertanian.html')
 
-    except (ValueError, KeyError):
-        return jsonify({"error": "Input tidak valid. Pastikan mengirim 'hasil_panen' dan 'sistem_pengairan'."}), 400
-
-@app.route('/zakat-penghasilan', methods=['POST'])
+@app.route('/zakat-penghasilan', methods=['GET', 'POST'])
 def zakat_penghasilan():
-    try:
-        data = request.get_json()
-        hasil_penghasilan = float(data['hasil_penghasilan'])  
-        harga_emas_per_gram = float(data['harga_emas_per_gram'])
+    if request.method == 'POST':
+        try:
+            hasil_penghasilan = float(request.form['hasil_penghasilan'])
+            harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
 
-        nisab = 85 * harga_emas_per_gram
+            nisab = 85 * harga_emas_per_gram
+            zakat = 0.025 * hasil_penghasilan if hasil_penghasilan >= nisab else 0
 
-        if hasil_penghasilan >= nisab:
-            zakat = 0.025 * hasil_penghasilan  
-        else:
-            zakat = 0  
-
-        return jsonify({
-            "hasil_penghasilan": hasil_penghasilan,
-            "harga_emas_per_gram": harga_emas_per_gram,
-            "nisab": nisab,
-            "zakat": zakat,
-            "keterangan": "Wajib zakat" if zakat > 0 else "Tidak wajib zakat"
-        })
-
-    except (ValueError, KeyError):
-        return jsonify({"error": "Input tidak valid. Pastikan mengirim 'hasil_penghasilan' dan 'harga_emas_per_gram'."}), 400
-
+            return render_template('zakat_penghasilan.html',
+                                   hasil_penghasilan=hasil_penghasilan,
+                                   harga_emas_per_gram=harga_emas_per_gram,
+                                   nisab=nisab, zakat=zakat,
+                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
+        except ValueError:
+            return render_template('zakat_penghasilan.html', error="Input tidak valid.")
+    return render_template('zakat_penghasilan.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
