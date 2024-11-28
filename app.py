@@ -34,16 +34,16 @@ def zakat_emas():
             wajib_zakat = False
 
         # ngeformat angka angka biar kalo udah 3 angka otomatis ada titik kayak nulis uang
-        total_nilai_zakat_formatted = f"{int(total_nilai_zakat):,}".replace(",", ".")
-        nisab_formatted = f"{int(nisab):,}".replace(",", ".")
+        total_nilai_zakat_formatted = f"{total_nilai_zakat:,.2f}".replace(",", ".")
+        nisab_formatted = f"{nisab:,.2f}".replace(",", ".")
 
         return render_template('zakat_emas.html', 
                                wajib_zakat=wajib_zakat, 
                                nilai_zakat=total_nilai_zakat_formatted,
                                nisab=nisab_formatted,
-                               harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+                               harga_emas_per_gram=f"{harga_emas_per_gram:,.2f}".replace(",", "."))
     
-    return render_template('zakat_emas.html', nilai_zakat=None, harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+    return render_template('zakat_emas.html', nilai_zakat=None, harga_emas_per_gram=f"{harga_emas_per_gram:,.2f}".replace(",", "."))
 
 
 # zakat perdagangan
@@ -78,30 +78,44 @@ def zakat_perdagangan():
                                    nisab = nisab_formatted,
                                    harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
     
-    return render_template('zakat-perdagangan.html', nilai_zakat=None,harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+    return render_template('zakat-perdagangan.html', nilai_zakat=None, harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
 
 @app.route('/zakat-pertanian', methods=['GET', 'POST'])
 def zakat_pertanian():
     if request.method == 'POST':
-        try:
-            hasil_panen = float(request.form['hasil_panen'])
-            sistem_pengairan = request.form['sistem_pengairan']
+        hasil_panen_kg = float(request.form.get('hasil_panen_kg', 0))
+        harga_per_kg = float(request.form.get('harga_per_kg', 0))
+        sistem_pengairan = request.form.get('sistem_pengairan', 'irigasi')
 
-            if sistem_pengairan not in ['irigasi', 'alami']:
-                return render_template('zakat_pertanian.html', error="Sistem pengairan harus 'irigasi' atau 'alami'.")
+        nisab = 635
+        hasil_panen_rp = hasil_panen_kg * harga_per_kg
 
-            nisab = 653  # dalam kg padi
-            zakat_percentage = 0.05 if sistem_pengairan == 'irigasi' else 0.10
-            zakat = hasil_panen * zakat_percentage if hasil_panen >= nisab else 0
+        if sistem_pengairan == 'irigasi':
+            total_nilai_zakat = 0.05 * hasil_panen_rp
+        else:
+            total_nilai_zakat = 0.1 * hasil_panen_rp
 
-            return render_template('zakat_pertanian.html',
-                                   hasil_panen=hasil_panen,
-                                   sistem_pengairan=sistem_pengairan,
-                                   nisab=nisab, zakat=zakat,
-                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
-        except ValueError:
-            return render_template('zakat_pertanian.html', error="Input tidak valid.")
-    return render_template('zakat_pertanian.html')
+        wajib_zakat = total_nilai_zakat >= nisab
+
+        total_nilai_zakat_formatted = f"{total_nilai_zakat:,.2f}".replace(",", ".")
+        nisab_formatted = f"{nisab:,.2f}".replace(",", ".")
+        harga_per_kg_formatted = f"{harga_per_kg:,.2f}".replace(",", ".")
+
+        return render_template('zakat_pertanian.html',
+                           wajib_zakat=wajib_zakat,
+                           sistem_pengairan=sistem_pengairan,
+                           nisab=nisab_formatted,
+                           nilai_zakat=total_nilai_zakat_formatted,
+                           harga_per_kg=harga_per_kg_formatted)
+
+# Untuk method GET
+    return render_template('zakat_pertanian.html', 
+                       nilai_zakat=None, 
+                       wajib_zakat=None, 
+                       sistem_pengairan=None, 
+                       nisab=None, 
+                       harga_per_kg=0)
+
 
 @app.route('/zakat-penghasilan', methods=['GET', 'POST'])
 def zakat_penghasilan():

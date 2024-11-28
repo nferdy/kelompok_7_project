@@ -1,20 +1,59 @@
 {% extends "base.html" %}
 
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/zakat-perdagangan.css')}}">
+{% endblock %}
+
 {% block content %}
 
-<h1 class="title_zakat">Zakat Pertanian</h1>
+<h1 class="title_zakat">Zakat Perdagangan</h1>
 <div class="form_input">
-    <form method="post" action="/zakat-emas">
-        <label for="quantity">Hasil Panen</label>
-        <div class="form-modal">
-            <span>Rp</span>
-            <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai modal anda...">
-        </div>
-        <label for="quantity">Nilai Piutang</label>
-        <span>Rp</span>
-        <input type="" id="quantity" name="quantity" min="0" placeholder="Input nilai piutang anda...">
-        <input type="submit">
-      </form>
+    <form method="post" action="/zakat-pertanian">
+        <label for="harga_per_kg">Harga Jual per Kg Saat Ini</label>
+        <p>Rp {{ harga_per_kg if harga_per_kg is not none else 0 }}</p>
+
+        <br>
+
+        <label for="harga_per_kg">Harga jual per Kg</label>
+        <input type="number" id="harga_per_kg" name="harga_per_kg" min="0" required placeholder="Input harga jual per kg saat ini...">
+        
+        <label for="hasil_panen_kg">Hasil Panen (Kg)</label>
+        <input type="number" id="hasil_panen_kg" name="hasil_panen_kg" min="0" required placeholder="Input nilai hasil panen Anda dalam Kg...">
+
+        <label for="sistem_pengairan">Sistem Perairan Lahan: </label>
+            <select name="sistem_pengairan" id="sistem_pengairan">
+                <option value="irigasi">Irigasi</option>
+                <option value="alami">Alami</option>
+            </select>
+
+        <br>
+
+        <button type="submit">Hitung zakat Anda</button>
+    </form>
 </div>
+
+{% if nilai_zakat is not none %}
+<div class="hasil_zakat">
+    <h2>Hasil Perhitungan</h2>
+    <p>Nisab (635 Kg)</p>
+    {% if wajib_zakat %}
+        <p class="zakat_yes"><strong>Anda wajib membayar zakat!</strong></p>
+        <p>Nilai Zakat yang harus dibayar: <strong>Rp {{ nilai_zakat }}</strong></p>
+    {% else %}
+        <p class="zakat_no"><strong>Anda tidak wajib membayar zakat.</strong></p>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="desc_zakat">
+  <p name="desc_zakat">
+    <b>Nisab dan Cara Menghitung Zakat Pertanian</b> <br>
+    Zakat pertanian wajib dikenakan jika hasil panen mencapai nisab 635 kg gabah. Besarnya kadar zakat adalah:<br>
+    - 5% untuk lahan dengan irigasi<br>
+    - 10% untuk lahan tanpa irigasi (mengandalkan air hujan).<br><br>
+    Sumber: basnas.go.id
+  </p>
+</div>
+
 
 {% endblock %}

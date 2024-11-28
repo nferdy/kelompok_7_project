@@ -121,3 +121,9 @@ button {
     width: 70%;
     margin: 20px 0 0 50px;
 }
+
+#sistem_pengairan {
+    width: 15%;
+    border-radius: 3px;
+    padding : 10px 30px 10px 30px;
+    }
