@@ -108,7 +108,6 @@ def zakat_pertanian():
                            nilai_zakat=total_nilai_zakat_formatted,
                            harga_per_kg=harga_per_kg_formatted)
 
-# Untuk method GET
     return render_template('zakat_pertanian.html', 
                        nilai_zakat=None, 
                        wajib_zakat=None, 
