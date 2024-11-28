@@ -8,12 +8,54 @@
 
 <h1 class="title_zakat">Zakat Perdagangan</h1>
 <div class="form_input">
-    <form method="post" action="/zakat-emas">
-        <label for="quantity">Nilai Piutang</label>
-        <span>Rp</span>
-        <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai piutang anda...">
-        <input type="submit">
-      </form>
+    <form method="post" action="/zakat-perdagangan">
+        <label for="harga_emas_per_gram">Harga Emas per Gram Saat Ini</label>
+        <p>Rp {{ harga_emas_per_gram }}</p>
+        <br>
+
+        <label for="jumlah_emas">Nilai Modal</label>
+        <input type="number" id="jumlah_modal" name="jumlah_modal" min="0" required placeholder="Input nilai modal anda dalam rupiah...">
+
+        <label for="jumlah_emas">Nilai Keuntungan</label>
+        <input type="number" id="jumlah_keuntungan" name="jumlah_keuntungan" min="0" required placeholder="Input nilai keuntungan anda dalam rupiah...">
+
+        <label for="jumlah_emas">Nilai Piutang</label>
+        <input type="number" id="jumlah_piutang" name="jumlah_piutang" min="0" required placeholder="Input nilai piutang anda dalam rupiah...">
+
+        <label for="jumlah_emas">Nilai Hutang</label>
+        <input type="number" id="jumlah_hutang" name="jumlah_hutang" min="0" required placeholder="Input nilai hutang anda dalam rupiah...">
+
+        <label for="jumlah_emas">Nilai Kerugian</label>
+        <input type="number" id="jumlah_kerugian" name="jumlah_kerugian" min="0" required placeholder="Input nilai kerugian anda dalam rupiah...">
+
+        <button type="submit">Hitung zakat Anda</button>
+    </form>
 </div>
+
+{% if nilai_zakat is not none %}
+<div class="hasil_zakat">
+    <h2>Hasil Perhitungan</h2>
+    <p>Nisab (85 gram): Rp {{ nisab }}</p>
+    {% if wajib_zakat %}
+        <p class="zakat_yes"><strong>Anda wajib membayar zakat!</strong></p>
+        <p>Nilai Zakat yang harus dibayar: <strong>Rp {{ nilai_zakat }}</strong></p>
+    {% else %}
+        <p class="zakat_no"><strong>Anda tidak wajib membayar zakat.</strong></p>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="desc_zakat">
+  <p name="desc_zakat">
+      <b>Nisab dan Cara Menghitung Zakat Emas</b> <br>
+      Zakat emas wajib dikenakan zakat jika emas yang tersimpan telah mencapai atau melebihi nisabnya yakni 85 gram (mengikuti harga Buy Back emas pada hari dimana zakat akan ditunaikan), 
+      kadar zakat emas adalah 2,5%.<br><br>
+      Berikut cara menghitung zakat emas/perak:<br>
+      2,5% x Jumlah emas yang tersimpan selama 1 tahun <br><br>
+
+      Sumber: basnas.go.id
+  </p>
+</div>
+
 
 {% endblock %}

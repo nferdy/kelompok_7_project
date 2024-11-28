@@ -49,29 +49,36 @@ def zakat_emas():
 # zakat perdagangan
 @app.route('/zakat-perdagangan', methods=['GET', 'POST'])
 def zakat_perdagangan():
+    harga_emas_per_gram = 1439700
+
     if request.method == 'POST':
-        try:
-            modal = float(request.form['modal'])
-            keuntungan = float(request.form['keuntungan'])
-            piutang = float(request.form['piutang'])
-            hutang = float(request.form['hutang'])
-            kerugian = float(request.form['kerugian'])
-            harga_emas_per_gram = float(request.form['harga_emas_per_gram'])
+            modal = float(request.form['jumlah_modal'])
+            keuntungan = float(request.form['jumlah_keuntungan'])
+            piutang = float(request.form['jumlah_piutang'])
+            hutang = float(request.form['jumlah_hutang'])
+            kerugian = float(request.form['jumlah_kerugian'])
 
             nisab = 85 * harga_emas_per_gram
-            nilai = (modal + keuntungan + piutang) - (kerugian + hutang)
-            zakat = 0.025 * nilai if nilai >= nisab else 0
+            nilai_dagang = (modal + keuntungan + piutang) - (kerugian + hutang)
+            total_nilai_zakat = 0
 
-            return render_template('perdagangan.html', 
-                                   modal=modal, keuntungan=keuntungan, 
-                                   piutang=piutang, hutang=hutang, 
-                                   kerugian=kerugian, nilai=nilai,
-                                   harga_emas_per_gram=harga_emas_per_gram,
-                                   nisab=nisab, zakat=zakat,
-                                   keterangan="Wajib zakat" if zakat > 0 else "Tidak wajib zakat")
-        except ValueError:
-            return render_template('perdagangan.html', error="Input tidak valid.")
-    return render_template('perdagangan.html')
+            if nilai_dagang >= nisab:
+                total_nilai_zakat = 0.025 * nilai_dagang
+                wajib_zakat = True
+
+            else:
+                wajib_zakat = False
+
+            total_nilai_zakat_formatted = f"{int(total_nilai_zakat):,}".replace(",", ".")
+            nisab_formatted = f"{int(nisab):,}".replace(",", ".")
+
+            return render_template('zakat-perdagangan.html',
+                                   wajib_zakat=wajib_zakat,
+                                   nilai_zakat = total_nilai_zakat_formatted,
+                                   nisab = nisab_formatted,
+                                   harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
+    
+    return render_template('zakat-perdagangan.html', nilai_zakat=None,harga_emas_per_gram=f"{int(harga_emas_per_gram):,}".replace(",", "."))
 
 @app.route('/zakat-pertanian', methods=['GET', 'POST'])
 def zakat_pertanian():
