@@ -1,18 +1,32 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <h1 class="title_zakat">Zakat Penghasilan</h1>
 <div class="form_input">
-    <form method="post" action="/zakat-emas">
-        <label for="quantity">Nilai Modal</label>
-        <div class="form-modal">
-            <span>Rp</span>
-            <input type="number" id="quantity" name="quantity" min="0" placeholder="Input nilai modal anda...">
-        </div>
-        <input type="submit">
-      </form>
+    <form method="post" action="/zakat-penghasilan">
+        <label for="hasil_penghasilan">Penghasilan Bulanan (Rp):</label>
+        <input type="number" id="hasil_penghasilan" name="hasil_penghasilan" min="0" required placeholder="Input nilai penghasilan Anda...">
+        <button type="submit">Hitung zakat Anda</button>
+    </form>
+    {% if zakat is not none %}
+    <div class="hasil_zakat">
+    <h2>Hasil Perhitungan</h2>
+    <p>Nisab (85 gram): Rp {{ nisab }}</p>
+    {% if wajib_zakat %}
+        <p class="zakat_yes"><strong>Anda wajib membayar zakat!</strong></p>
+        <p>Nilai Zakat yang harus dibayar: <strong>Rp {{ zakat }}</strong></p>
+    {% else %}
+        <p class="zakat_no"><strong>Anda tidak wajib membayar zakat.</strong></p>
+    {% endif %}
 </div>
+{% endif %}
+<div class="desc_zakat">
+    <p name="desc_zakat">
+        <b>Nisab dan Cara Menghitung Zakat Penghasilan</b> <br>
+        zakat pendapatan adalah bagian dari zakat mal yang wajib dikeluarkan atas harta yang berasal dari pendapatan / penghasilan rutin dari pekerjaan yang tidak melanggar syariah.<br><br>
+        Berikut cara menghitung zakat penghasilan:<br>
+        2,5% x Jumlah penghasilan dalam 1 bulan <br><br>
 
-
+        Sumber: basnas.go.id
+    </p>
+</div>
 {% endblock %}
